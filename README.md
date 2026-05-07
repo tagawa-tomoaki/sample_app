@@ -33,3 +33,25 @@ $ rails test
 
 詳しくは、[*Ruby on Rails チュートリアル*](https://railstutorial.jp/)
 を参考にしてください。
+
+## Render にデプロイする場合（`secret_key_base` エラー対策）
+
+Render の build / 起動時に `secret_key_base` が必要です。
+`config/master.key` はリポジトリに含まれないため（`.gitignore` で除外）、Render 側で次のいずれかを設定してください。
+
+- 推奨: `RAILS_MASTER_KEY` を Render の Environment Variables に設定
+	- 値はローカルの `config/master.key` の中身
+	- これにより `config/credentials.yml.enc` が復号でき、`secret_key_base` も取得できます
+- 代替: `SECRET_KEY_BASE` を Render の Environment Variables に設定
+	- `bin/rails secret` で生成した十分に長いランダム文字列を設定
+
+補足:
+
+- `RAILS_SERVE_STATIC_FILES=1` を設定すると、Rails がプリコンパイル済みアセットを配信できます
+- build の `assets:precompile` だけ通したい場合は、build 時だけ `SECRET_KEY_BASE_DUMMY=1` を設定する方法もあります（ただし本番起動には上記どちらかの設定が必要です）
+
+`config/master.key` を誤ってコミットしてしまった場合は、追跡から外した上でキーをローテーションしてください。
+
+```
+git rm --cached config/master.key
+```
