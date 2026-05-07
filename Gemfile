@@ -12,13 +12,17 @@ gem 'rails',           '8.0.2.1'
 gem "bootstrap-sass",  '3.4.1'
 gem 'sassc-rails',     '2.1.2'
 gem 'sprockets-rails', '3.4.2'
-gem 'sqlite3',         '2.7.3'
 gem 'stimulus-rails',  '1.2.1'
 gem 'turbo-rails',     '1.4.0'
+
+group :production do
+  gem 'pg'
+end
 
 group :development, :test do
   gem 'debug', '1.7.1', platforms: %i[mri mingw x64_mingw]
   gem 'reline', '0.5.10'
+  gem 'sqlite3', '2.7.3'
 end
 
 group :development do
